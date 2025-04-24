@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from "cors"
 import { userRouter } from './routers/user.router';
 import dotenv from 'dotenv';
+import { lobbyRouter } from './routers/lobby.router';
+import { mapRouter } from './routers/map.router';
 dotenv.config();
 
 const databaseUrl = process.env.DATABASE_URL as string
@@ -25,6 +27,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use("/user", userRouter);
+app.use("/lobby", lobbyRouter);
+app.use("/map", mapRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

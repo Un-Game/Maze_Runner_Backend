@@ -9,7 +9,7 @@ dotenv.config();
 
 const databaseUrl = process.env.DATABASE_URL as string
 const app = express();
-const port = 8000;
+const port = 3000;
 
 console.log(databaseUrl);
 const connectDB = async () => {

@@ -9,7 +9,7 @@ dotenv.config();
 
 const databaseUrl = process.env.DATABASE_URL as string
 const app = express();
-const port = 999;
+const port = 8000;
 
 console.log(databaseUrl);
 const connectDB = async () => {
@@ -17,7 +17,7 @@ const connectDB = async () => {
     await mongoose.connect(databaseUrl as string)
     console.log("Database connected");
   } catch (error) {
-    console.log("Database not connected" , error);
+    console.log("Database not connected", error);
   }
 }
 

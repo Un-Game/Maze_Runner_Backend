@@ -5,4 +5,7 @@ export const controlSchema = new mongoose.Schema({
   down: { type: String, default: 'S' },
   left: { type: String, default: 'A' },
   right: { type: String, default: 'D' },
+  skill1: {type: String, default: "C"},
+  skill2: {type: String, default: "F"},
+  skill3: {type: String, default: "T"}
 }, { _id: false });

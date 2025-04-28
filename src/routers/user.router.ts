@@ -7,7 +7,7 @@ import { loginAuthentication } from '../controller/users/login';
 
 export const userRouter = express.Router();
 
-userRouter.get("/", getUser);
+userRouter.get("/:id", getUser);
 userRouter.post("/", createUser);
 userRouter.put("/", updateUser);
 userRouter.delete("/:id", deleteUser);

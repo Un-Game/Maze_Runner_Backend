@@ -15,7 +15,7 @@ export const loginAuthentication = async (req: Request, res: Response) => {
             const decodePass = "123";
             if (match) {
                 const token = jwt.sign({
-                    exp: Math.floor(Date.now() / 1000) + 60 * 60, date: user
+                    exp: Math.floor(Date.now() / 1000) + 60 * 60, user: user
                 }, decodePass);
                 const userData = {email: user.email }
                 res.status(200).json({ success: true, message: "logged in", token: token, userData: userData });

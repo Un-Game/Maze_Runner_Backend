@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     exp: {type: Number, default: 0},
     avatar: {type: String},
     control: { type: controlSchema, default: () => ({}) },
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
 })
 
 export const User = mongoose.model("user", userSchema);

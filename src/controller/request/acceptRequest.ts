@@ -9,7 +9,7 @@ export const acceptRequest = async(req: Request, res: Response) => {
         await Req.findOneAndDelete({senderId:senderId, receiverId:receiverId});
         try {
 
-            const response = await axios.put("http://localhost:999/user/friend",{
+            const response = await axios.put("http://localhost:999/user/addfriend",{
                 senderId: senderId,
                 receiverId: receiverId
             });

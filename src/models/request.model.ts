@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const requestSchema = new mongoose.Schema({
-    senderId: {type: Number, require: true},
-    receiverId: {type: Number, require: true}
+    senderId: {type: mongoose.Schema.Types.ObjectId, require: true},
+    receiverId: {type: mongoose.Schema.Types.ObjectId, require: true}
 })
 
 requestSchema.index({ senderId: 1, receiverId: 1 });

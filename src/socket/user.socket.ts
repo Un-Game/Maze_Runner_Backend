@@ -15,6 +15,15 @@ export function initSocket(server: HttpServer) {
     },
   });
 
+  function getKeyByValue(value:String) {
+    for (const [key, val] of activeUsers.entries()) {
+      if (val === value) {
+        return key;
+      }
+    }
+    return undefined;
+  }
+
   io.on("connection", (socket) => {
     console.log(`[SOCKET] Connected: ${socket.id}`);
 
@@ -32,9 +41,25 @@ export function initSocket(server: HttpServer) {
         timestamp: new Date().toISOString(),
       };
 
-      io.emit("chat:message", payload); // Broadcast to everyone
+      io.emit("chat:message", payload);
       console.log(`[CHAT]`, payload);
     });
+
+    socket.on("chat:dm", (data) => {
+      const payload = {
+        ...data,
+        userId: activeUsers.get(socket.id),
+        timestamp: new Date().toISOString(),
+      };
+
+      const receiver = getKeyByValue(data.to);
+
+      if(receiver){
+        io.to(receiver).emit("chat:dm", payload);
+        io.to(socket.id).emit("chat:dm", payload);
+        console.log("DM", payload);
+      }
+    })
 
     // ==== Lobby System ====
     socket.on("lobby:join", (lobbyId: string) => {

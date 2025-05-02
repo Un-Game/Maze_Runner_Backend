@@ -12,7 +12,8 @@ export const createUser = async(req: Request, res: Response) => {
             email: email,
             password: hashedPassword,
             username: username,
-            avatar: ""
+            avatar: "",
+            friends: [],
         })
         res.send("User created").status(201)
     } catch (error) {

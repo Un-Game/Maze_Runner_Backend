@@ -7,13 +7,15 @@ import { loginAuthentication } from '../controller/users/login';
 import { newFriend } from '../controller/users/newFriend';
 import { removeFriend } from '../controller/users/removeFriend';
 import { findUser } from '../controller/users/findUser';
+import { getAllUser } from '../controller/users/getAllUser';
 
 export const userRouter = express.Router();
 
 userRouter.get("/:id", getUser);
 userRouter.get("/find/:username", findUser);
+userRouter.get("/", getAllUser)
 userRouter.post("/", createUser);
-userRouter.put("/", updateUser);
+userRouter.put("/:id", updateUser);
 userRouter.delete("/:id", deleteUser);
 userRouter.post("/login", loginAuthentication );
 userRouter.put("/addfriend", newFriend);

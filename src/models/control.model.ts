@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 
 export const controlSchema = new mongoose.Schema({
-  up: { type: String, default: 'W' },
-  down: { type: String, default: 'S' },
-  left: { type: String, default: 'A' },
-  right: { type: String, default: 'D' },
-  skill1: {type: String, default: "C"},
-  skill2: {type: String, default: "F"},
-  skill3: {type: String, default: "T"}
+  up: { type: String, default: 'w' },
+  down: { type: String, default: 's' },
+  left: { type: String, default: 'a' },
+  right: { type: String, default: 'd' },
+  skill1: {type: String, default: "c"},
+  skill2: {type: String, default: "f"},
+  skill3: {type: String, default: "t"}
+  
 }, { _id: false });

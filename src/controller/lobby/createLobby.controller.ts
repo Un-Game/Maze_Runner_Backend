@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import { Lobby } from '../../models/lobby.model';
+import { generateUniqueJoinCode } from '../../utils/generateJoinCode';
 
 export const createLobby = async (req: Request, res: Response) => {
     const { players, map, status, game_mode } = req.body;
+
 
     if (!players || !Array.isArray(players) || players.length === 0) {
         res.status(400).json({ error: 'At least one player is required' });
@@ -13,11 +15,13 @@ export const createLobby = async (req: Request, res: Response) => {
     }
 
     try {
+        const joinCode = await generateUniqueJoinCode();
         const newLobby = new Lobby({
             players,
             map,
             status,
-            game_mode
+            game_mode,
+            joinCode
         });
 
         await newLobby.save();

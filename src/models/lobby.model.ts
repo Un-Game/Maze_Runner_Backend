@@ -1,9 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema, Model } from "mongoose";
 
-const lobbySchema = new mongoose.Schema({
-    players: [
-        { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
-    ],
+export interface ILobby extends Document {
+    players: mongoose.Types.ObjectId[];
+    status: "starting" | "in_progress" | "ended";
+    game_mode: "ranked" | "unranked" | "custom";
+    map: mongoose.Types.ObjectId;
+    joinCode: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const LobbySchema = new Schema<ILobby>({
+    players: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
     status: {
         type: String,
         enum: ["starting", "in_progress", "ended"],
@@ -14,11 +22,13 @@ const lobbySchema = new mongoose.Schema({
         enum: ["ranked", "unranked", "custom"],
         default: "unranked"
     },
-    map: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Map",
-        required: true
+    map: { type: Schema.Types.ObjectId, ref: "Map", required: true },
+    joinCode: {
+        type: String,
+        required: true,
+        unique: true,
+        length: 6
     }
 }, { timestamps: true });
 
-export const Lobby = mongoose.model("Lobby", lobbySchema);
+export const Lobby: Model<ILobby> = mongoose.models.Lobby || mongoose.model<ILobby>("Lobby", LobbySchema);

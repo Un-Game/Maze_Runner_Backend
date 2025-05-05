@@ -1,22 +1,26 @@
-import express from 'express'
-import { getUser } from '../controller/users/getUser';
-import { createUser } from '../controller/users/createUser.controller';
-import { updateUser } from '../controller/users/updateUser.controller';
-import { deleteUser } from '../controller/users/deleteUser.controller';
-import { loginAuthentication } from '../controller/users/login';
-import { newFriend } from '../controller/users/newFriend';
-import { removeFriend } from '../controller/users/removeFriend';
-import { findUser } from '../controller/users/findUser';
-import { getAllUser } from '../controller/users/getAllUser';
+import express from "express";
+import { getUser } from "../controller/users/getUser";
+import { createUser } from "../controller/users/createUser.controller";
+import { updateUser } from "../controller/users/updateUser.controller";
+import { deleteUser } from "../controller/users/deleteUser.controller";
+import { loginAuthentication } from "../controller/users/login";
+import { newFriend } from "../controller/users/newFriend";
+import { removeFriend } from "../controller/users/removeFriend";
+import { findUser } from "../controller/users/findUser";
+import { getAllUser } from "../controller/users/getAllUser";
+import { getKeybind } from "../controller/users/getUserKeybind";
+import { updateKeybind } from "../controller/users/updateKeybind";
 
 export const userRouter = express.Router();
 
 userRouter.get("/:id", getUser);
 userRouter.get("/find/:username", findUser);
-userRouter.get("/", getAllUser)
+userRouter.get("/", getAllUser);
 userRouter.post("/", createUser);
 userRouter.put("/:id", updateUser);
 userRouter.delete("/:id", deleteUser);
-userRouter.post("/login", loginAuthentication );
+userRouter.post("/login", loginAuthentication);
 userRouter.put("/addfriend", newFriend);
 userRouter.put("/removefriend", removeFriend);
+userRouter.get("/:id/keybinds", getKeybind);
+userRouter.put("/:id/keybinds", updateKeybind);

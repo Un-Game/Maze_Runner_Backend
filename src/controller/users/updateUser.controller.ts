@@ -6,8 +6,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      { email, password, username, avatar, exp},
-      { control },
+      { exp, control },
       { new: true }
     );
 
@@ -18,7 +17,7 @@ export const updateUser = async (req: Request, res: Response) => {
     res.send("User updated").status(200);
   } catch (error) {
     res.send().status(400);
-    
-    console.log("Error occured ", error);
+
+    console.log("Error occurred ", error);
   }
 };

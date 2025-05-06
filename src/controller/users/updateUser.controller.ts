@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import { User } from "../../models/user.model";
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { email, password, username, avatar, exp, control } = req.body;
+  const { id } = req.params;
 
   try {
+    
     const updatedUser = await User.findByIdAndUpdate(
-      { exp, control },
+      id,
+      { ...req.body },
       { new: true }
     );
 
@@ -14,10 +16,9 @@ export const updateUser = async (req: Request, res: Response) => {
       res.status(404).send("User not found");
     }
 
-    res.send("User updated").status(200);
+    res.status(200).send("User updated");
   } catch (error) {
-    res.send().status(400);
-
-    console.log("Error occurred ", error);
+    console.log("Error occurred", error);
+    res.status(400).send("Failed to update user");
   }
 };

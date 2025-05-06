@@ -2,19 +2,32 @@ import { Request, Response } from 'express';
 import { Lobby } from '../../models/lobby.model';
 
 export const updateLobby = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { players, status, game_mode, map } = req.body;
+  const { joinCode } = req.params;
+  const { addPlayers, removePlayers, status, game_mode, map } = req.body;
+
+  const updateQuery: any = {};
+
+  if (addPlayers && Array.isArray(addPlayers)) {
+    updateQuery.$addToSet = { players: { $each: addPlayers } };
+  }
+
+  if (removePlayers && Array.isArray(removePlayers)) {
+    updateQuery.$pull = { players: { $in: removePlayers } };
+  }
+
+  if (status || game_mode || map) {
+    updateQuery.$set = {
+      ...(status && { status }),
+      ...(game_mode && { game_mode }),
+      ...(map && { map }),
+    };
+  }
 
   try {
-    const updatedLobby = await Lobby.findByIdAndUpdate(
-      id,
-      {
-        ...(players && { players }),
-        ...(status && { status }),
-        ...(game_mode && { game_mode }),
-        ...(map && { map })
-      },
-      { new: true, runValidators: true }
+    const updatedLobby = await Lobby.findOneAndUpdate(
+      { joinCode },
+      updateQuery,
+      { new: true}
     );
 
     if (!updatedLobby) {

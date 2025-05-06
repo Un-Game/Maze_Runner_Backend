@@ -6,12 +6,13 @@ export interface ILobby extends Document {
     game_mode: "ranked" | "unranked" | "custom";
     map: mongoose.Types.ObjectId;
     joinCode: string;
+    isPrivate: boolean
     createdAt: Date;
     updatedAt: Date;
 }
 
 const LobbySchema = new Schema<ILobby>({
-    players: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
+    players: [{ type: Schema.Types.ObjectId, ref: "user", required: true }],
     status: {
         type: String,
         enum: ["starting", "in_progress", "ended"],
@@ -28,6 +29,10 @@ const LobbySchema = new Schema<ILobby>({
         required: true,
         unique: true,
         length: 6
+    },
+    isPrivate: {
+        type: Boolean,
+        required: true,
     }
 }, { timestamps: true });
 

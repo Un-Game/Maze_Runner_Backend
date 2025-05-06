@@ -62,6 +62,9 @@ export function initSocket(server: HttpServer) {
     })
 
     // ==== Lobby System ====
+
+    // socket.on("lobby:create", )
+
     socket.on("lobby:join", (lobbyId: string) => {
       socket.join(lobbyId);
       console.log(`[LOBBY] ${socket.id} joined ${lobbyId}`);

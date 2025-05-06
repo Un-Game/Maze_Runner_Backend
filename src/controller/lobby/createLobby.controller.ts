@@ -3,7 +3,7 @@ import { Lobby } from '../../models/lobby.model';
 import { generateUniqueJoinCode } from '../../utils/generateJoinCode';
 
 export const createLobby = async (req: Request, res: Response) => {
-    const { players, map, status, game_mode } = req.body;
+    const { players, map, status, game_mode, isPrivate } = req.body;
 
 
     if (!players || !Array.isArray(players) || players.length === 0) {
@@ -21,7 +21,8 @@ export const createLobby = async (req: Request, res: Response) => {
             map,
             status,
             game_mode,
-            joinCode
+            joinCode,
+            isPrivate
         });
 
         await newLobby.save();

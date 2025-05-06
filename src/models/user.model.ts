@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   exp: { type: Number, default: 0 },
-  avatar: { type: String },
+  avatar: { type: String, default: "" },
   control: { type: controlSchema, default: () => ({}) },
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 });

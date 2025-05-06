@@ -10,6 +10,7 @@ import { findUser } from "../controller/users/findUser";
 import { getAllUser } from "../controller/users/getAllUser";
 import { getKeybind } from "../controller/users/getUserKeybind";
 import { updateKeybind } from "../controller/users/updateKeybind";
+import { updatePassword } from "../controller/users/updatePassword.controller";
 
 export const userRouter = express.Router();
 
@@ -18,6 +19,7 @@ userRouter.get("/find/:username", findUser);
 userRouter.get("/", getAllUser);
 userRouter.post("/", createUser);
 userRouter.put("/:id", updateUser);
+userRouter.put("/:id/password", updatePassword);
 userRouter.delete("/:id", deleteUser);
 userRouter.post("/login", loginAuthentication);
 userRouter.put("/addfriend", newFriend);

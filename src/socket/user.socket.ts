@@ -31,6 +31,12 @@ export function initSocket(server: HttpServer) {
     socket.on("identify", (userId: string) => {
       activeUsers.set(socket.id, userId);
       console.log(`[SOCKET] ${socket.id} identified as ${userId}`);
+
+      activeUsers.forEach((element,ind) => {
+        console.log(`User ${ind}: ${element}`);
+        
+      });
+      
     });
 
     // ==== Chat System ====

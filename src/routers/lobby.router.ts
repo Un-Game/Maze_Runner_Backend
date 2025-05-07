@@ -7,7 +7,7 @@ import { publicLobby } from '../controller/lobby/publicLobby.controller';
 
 export const lobbyRouter = express.Router();
 
-lobbyRouter.get("/:id", getLobby);
+lobbyRouter.get("/:code", getLobby);
 lobbyRouter.get("", publicLobby);
 lobbyRouter.post("/", createLobby);
 lobbyRouter.put("/:id", updateLobby );

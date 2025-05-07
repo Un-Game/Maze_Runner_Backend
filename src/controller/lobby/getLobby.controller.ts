@@ -3,9 +3,10 @@ import { Request, Response } from 'express';
 import { Lobby } from '../../models/lobby.model';
 
 export const getLobby = async (req: Request, res: Response) => {
-    const {id} = req.params;
+    const {code} = req.params;
     try {
-        const lobbyData = await Lobby.findOne({ players: { $in: [id] } });
+        const lobbyData = await Lobby.findOne({joinCode: code})
+        .populate("players","username avatar");
 
         if(!lobbyData){
             res.send("Not found").status(404);

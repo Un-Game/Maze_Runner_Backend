@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 export interface ILobby extends Document {
+    name: string;
     players: mongoose.Types.ObjectId[];
     status: "starting" | "in_progress" | "ended";
     game_mode: "ranked" | "unranked" | "custom";
@@ -12,6 +13,7 @@ export interface ILobby extends Document {
 }
 
 const LobbySchema = new Schema<ILobby>({
+    name: {type: String, required: true},
     players: [{ type: Schema.Types.ObjectId, ref: "user", required: true }],
     status: {
         type: String,
@@ -21,7 +23,7 @@ const LobbySchema = new Schema<ILobby>({
     game_mode: {
         type: String,
         enum: ["ranked", "unranked", "custom"],
-        default: "unranked"
+        default: "custom"
     },
     map: { type: Schema.Types.ObjectId, ref: "Map", required: true },
     joinCode: {

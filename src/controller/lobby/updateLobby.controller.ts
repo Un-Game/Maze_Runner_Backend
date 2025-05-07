@@ -3,7 +3,7 @@ import { Lobby } from '../../models/lobby.model';
 
 export const updateLobby = async (req: Request, res: Response) => {
   const { joinCode } = req.params;
-  const { addPlayers, removePlayers, status, game_mode, map } = req.body;
+  const { addPlayers, removePlayers, status, game_mode, map, name } = req.body;
 
   const updateQuery: any = {};
 
@@ -15,11 +15,12 @@ export const updateLobby = async (req: Request, res: Response) => {
     updateQuery.$pull = { players: { $in: removePlayers } };
   }
 
-  if (status || game_mode || map) {
+  if (status || game_mode || map || name) {
     updateQuery.$set = {
       ...(status && { status }),
       ...(game_mode && { game_mode }),
       ...(map && { map }),
+      ...(name && { name }),
     };
   }
 

@@ -27,9 +27,12 @@ export const createLobby = async (req: Request, res: Response) => {
 
         await newLobby.save();
 
+        const populatedLobby = await Lobby.findById(newLobby._id)
+        .populate('players', 'username avatar');
+
         res.status(201).json({
             message: 'Lobby created successfully',
-            lobby: newLobby
+            lobby: populatedLobby
         });
     } catch (error) {
         res.send().status(400)

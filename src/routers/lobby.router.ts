@@ -10,5 +10,5 @@ export const lobbyRouter = express.Router();
 lobbyRouter.get("/:code", getLobby);
 lobbyRouter.get("", publicLobby);
 lobbyRouter.post("/", createLobby);
-lobbyRouter.put("/:id", updateLobby );
+lobbyRouter.put("/:code", updateLobby );
 lobbyRouter.delete('/:id', deleteLobby);

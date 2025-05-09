@@ -1,15 +1,17 @@
 import { Server } from "socket.io";
 import { Server as HttpServer } from "http";
+import axios from "axios";
 
 let io: Server;
 const activeUsers = new Map<string, string>(); // socket.id -> userId
+const lobbyList = new Set();
 
 export function initSocket(server: HttpServer) {
   if (io) return; // Prevent re-initialization
 
   io = new Server(server, {
     cors: {
-      origin: ["https://mazerunner-zen1e-monhdelgers-projects.vercel.app", "http://localhost:3000"],
+      origin: ["https://mazerunner-zen1e-monhdelgers-projects.vercel.app", "http://localhost:3000","http://192.168.129.199:3000"],
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -71,24 +73,40 @@ export function initSocket(server: HttpServer) {
 
     // socket.on("lobby:create", )
 
-    socket.on("lobby:join", (lobbyId: string) => {
-      socket.join(lobbyId);
-      console.log(`[LOBBY] ${socket.id} joined ${lobbyId}`);
+    socket.on("lobby:join", async(data) => {
 
-      io.to(lobbyId).emit("lobby:update", {
-        userId: activeUsers.get(socket.id),
-        type: "joined",
-      });
+      const {room} = data;
+      
+      const joining = activeUsers.get(socket.id)
+      if(!joining || !room)
+        return;
+      
+      socket.join(room);
+      
+      try{
+        await axios.put(`http://localhost:999/lobby/${room}`,{addPlayers: [joining]})
+        io.to(room).emit("lobby:update", {});
+      }catch(err){
+        console.log("Couldn't send to db");
+      }
+      
     });
 
-    socket.on("lobby:leave", (lobbyId: string) => {
-      socket.leave(lobbyId);
-      console.log(`[LOBBY] ${socket.id} left ${lobbyId}`);
+    socket.on("lobby:leave", async(data) => {
+      const {room} = data
 
-      io.to(lobbyId).emit("lobby:update", {
-        userId: activeUsers.get(socket.id),
-        type: "left",
-      });
+      const leaving = activeUsers.get(socket.id)
+      if(!room || !leaving)
+        return;
+
+      socket.leave(room);
+
+      try{
+        await axios.put(`http://localhost:999/lobby/${room}`,{removePlayers: [leaving]})
+        io.to(room).emit("lobby:update", {});
+      }catch(err){
+        console.log("Couldn't send to db");
+      }
     });
 
     // ==== Notifications ====

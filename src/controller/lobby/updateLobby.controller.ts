@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { Lobby } from '../../models/lobby.model';
 
 export const updateLobby = async (req: Request, res: Response) => {
-  const { joinCode } = req.params;
+  const { code } = req.params;
+  const joinCode = Number(code);
+  
   const { addPlayers, removePlayers, status, game_mode, map, name } = req.body;
 
   const updateQuery: any = {};
@@ -33,6 +35,7 @@ export const updateLobby = async (req: Request, res: Response) => {
 
     if (!updatedLobby) {
       res.status(404).json({ error: 'Lobby not found' });
+      return;
     }
 
     res.status(200).json({

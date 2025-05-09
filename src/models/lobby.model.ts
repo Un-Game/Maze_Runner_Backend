@@ -14,7 +14,7 @@ export interface ILobby extends Document {
 
 const LobbySchema = new Schema<ILobby>({
     name: {type: String, required: true},
-    players: [{ type: Schema.Types.ObjectId, ref: "user", required: true }],
+    players: [{ type: Schema.Types.ObjectId, ref: "user" }],
     status: {
         type: String,
         enum: ["starting", "in_progress", "ended"],

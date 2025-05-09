@@ -38,6 +38,11 @@ export const updateLobby = async (req: Request, res: Response) => {
       return;
     }
 
+    if (updatedLobby.players.length === 0) {
+      await Lobby.deleteOne({ joinCode });
+      return res.status(200).json({ message: 'Lobby was empty and has been deleted' });
+    }
+
     res.status(200).json({
       message: 'Lobby updated successfully',
       lobby: updatedLobby

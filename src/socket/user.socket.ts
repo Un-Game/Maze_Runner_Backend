@@ -78,8 +78,18 @@ export function initSocket(server: HttpServer) {
       const {room} = data;
       
       const joining = activeUsers.get(socket.id)
-      if(!joining || !room)
+      if(!joining || !room){
+        io.to(socket.id).emit("lobby:error",{message: "Input needed"});
         return;
+      }
+
+      const roomInfo = io.sockets.adapter.rooms.get(room);
+      if(roomInfo && roomInfo.size === 2){
+        io.to(socket.id).emit("lobby:error",{message: `${roomInfo.size}`});
+        return;
+      }
+
+      io.to(socket.id).emit("lobby:success");
       
       socket.join(room);
       

@@ -29,16 +29,9 @@ export function initSocket(server: HttpServer) {
   io.on("connection", (socket) => {
     console.log(`[SOCKET] Connected: ${socket.id}`);
 
-    // Identify the user (e.g., on login or token validation)
     socket.on("identify", (userId: string) => {
       activeUsers.set(socket.id, userId);
       console.log(`[SOCKET] ${socket.id} identified as ${userId}`);
-
-      activeUsers.forEach((element,ind) => {
-        console.log(`User ${ind}: ${element}`);
-        
-      });
-      
     });
 
     // ==== Chat System ====
@@ -70,8 +63,6 @@ export function initSocket(server: HttpServer) {
     })
 
     // ==== Lobby System ====
-
-    // socket.on("lobby:create", )
 
     socket.on("lobby:join", async(data) => {
 
@@ -118,6 +109,27 @@ export function initSocket(server: HttpServer) {
         console.log("Couldn't send to db");
       }
     });
+
+    socket.on("lobby:start", async(data) => {
+      const {room} = data
+
+      if(!room)
+        return;
+
+      try{
+        await axios.put(`http://localhost:999/lobby/${room}`,{status: "in_progress"})
+        io.to(room).emit("lobby:start");
+      }catch(err){
+        console.log("Couldn't start the game");
+      }
+    })
+
+    // ==== Game ====
+    socket.on("game:move", (data) => {
+      const {x,y,room} = data;
+      console.log(room,x,y);
+      socket.to(room).emit("game:move",{x,y});
+    })
 
     // ==== Notifications ====
     socket.on("notification:send", (data) => {

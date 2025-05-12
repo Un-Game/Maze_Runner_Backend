@@ -8,6 +8,7 @@ import { lobbyRouter } from './routers/lobby.router';
 import { mapRouter } from './routers/map.router';
 import { requestRouter } from './routers/request.router';
 import { initSocket } from './socket/user.socket';
+import { messageRouter } from './routers/directMessage.router';
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use("/user", userRouter);
 app.use("/lobby", lobbyRouter);
 app.use("/map", mapRouter);
 app.use("/request", requestRouter);
+app.use("/message", messageRouter);
 
 initSocket(server);
 

@@ -127,8 +127,12 @@ export function initSocket(server: HttpServer) {
     // ==== Game ====
     socket.on("game:move", (data) => {
       const {x,y,room} = data;
-      console.log(room,x,y);
-      socket.to(room).emit("game:move",{x,y});
+      socket.broadcast.to(room).emit("game:move",{x,y});
+    })
+
+    socket.on("game:ping", (data) => {
+      const {timeStamp} = data;
+      socket.emit("game:ping",{timeStamp:timeStamp});
     })
 
     // ==== Notifications ====

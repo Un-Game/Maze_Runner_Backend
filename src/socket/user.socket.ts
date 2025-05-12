@@ -35,6 +35,15 @@ export function initSocket(server: HttpServer) {
       console.log(`[SOCKET] ${socket.id} identified as ${userId}`);
     });
 
+    // ==== Friend ====
+
+    socket.on("friend:request",(data)=>{
+      const {sender} = data;
+      const s = getKeyByValue(sender);
+      if(!s) return;
+      io.to(s).emit("friend:request");
+    })
+
     // ==== Chat System ====
     socket.on("chat:message", (data) => {
       const payload = {

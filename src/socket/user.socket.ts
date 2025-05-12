@@ -145,6 +145,11 @@ export function initSocket(server: HttpServer) {
       socket.to(room).emit("game:move", { x, y });
     })
 
+    socket.on("game:ping", (data) => {
+      const {timeStamp} = data;
+      socket.emit("game:ping",{timeStamp:timeStamp});
+    })
+
     // ==== Notifications ====
     socket.on("notification:send", (data) => {
       const { toUserId, message } = data;

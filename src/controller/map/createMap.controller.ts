@@ -5,15 +5,14 @@ import { Map } from '../../models/map.model';
 export const createMap = async (req: Request, res: Response) => {
     const { name, layout, start_points } = req.body;
 
-    if (!name || !layout || !start_points?.player1 || !start_points?.player2) {
-        res.status(400).json({ error: 'Missing required fields: name, layout, or start_points' });
+    if (!name || !layout) {
+        res.status(400).json({ error: 'Missing required fields: name, layout'});
     }
 
     try {
         const newMap = new Map({
             name,
-            layout,
-            start_points
+            layout
         });
 
         await newMap.save();

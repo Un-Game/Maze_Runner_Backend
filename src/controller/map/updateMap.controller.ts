@@ -3,7 +3,7 @@ import { Map } from '../../models/map.model';
 
 export const updateMap = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, layout, start_points } = req.body;
+    const { name, layout } = req.body;
 
     try {
         const updatedMap = await Map.findByIdAndUpdate(
@@ -11,7 +11,6 @@ export const updateMap = async (req: Request, res: Response) => {
             {
                 ...(name && { name }),
                 ...(layout && { layout }),
-                ...(start_points && { start_points }),
             },
             { new: true, runValidators: true }
         );

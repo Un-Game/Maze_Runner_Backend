@@ -8,7 +8,7 @@ const activeUsers = new Map<string, string>(); // socket.id -> userId
 const lobbyList = new Set();
 
 export function initSocket(server: HttpServer) {
-  if (io) return; // Prevent re-initialization
+  if (io) return;
 
   io = new Server(server, {
     cors: {
@@ -158,20 +158,11 @@ export function initSocket(server: HttpServer) {
       socket.emit("game:ping",{timeStamp:timeStamp});
     })
 
-    // ==== Notifications ====
-    socket.on("notification:send", (data) => {
-      const { toUserId, message } = data;
-
-      // You could store userId -> socket.id mappings if needed
-      for (const [sockId, uid] of activeUsers.entries()) {
-        if (uid === toUserId) {
-          io.to(sockId).emit("notification", {
-            from: activeUsers.get(socket.id),
-            message,
-          });
-        }
-      }
-    });
+    socket.on("game:finish", (data)=>{
+      const {room} = data;
+      const winner = activeUsers.get(socket.id);
+      io.to(room).emit("game:finished",{winner: winner});
+    })
 
     // ==== Disconnect ====
     socket.on("disconnect", () => {

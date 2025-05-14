@@ -8,12 +8,13 @@ import { newFriend } from "../controller/users/newFriend";
 import { removeFriend } from "../controller/users/removeFriend";
 import { findUser } from "../controller/users/findUser";
 import { getAllUser } from "../controller/users/getAllUser";
+import { checkUsernameAndEmailTaken } from "../middleware/user.middleware";
 
 export const userRouter = express.Router();
 
 userRouter.get("/find/:username", findUser);
 userRouter.get("/", getAllUser);
-userRouter.post("/", createUser);
+userRouter.post("/", checkUsernameAndEmailTaken, createUser);
 userRouter.put("/addfriend", newFriend);
 userRouter.put("/removefriend", removeFriend);
 userRouter.put("/:id", updateUser);

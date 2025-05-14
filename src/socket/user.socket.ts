@@ -12,7 +12,7 @@ export function initSocket(server: HttpServer) {
 
   io = new Server(server, {
     cors: {
-      origin: ["https://mazerunner-zen1e-monhdelgers-projects.vercel.app", "https://mazerunnerd.vercel.app", "https://mazerunner-five.vercel.app/", "http://localhost:3000", "http://192.168.129.199:3000"],
+      origin: ["https://mazerunner-zen1e-monhdelgers-projects.vercel.app", "https://mazerunnerd.vercel.app", "https://mazerunner-five.vercel.app", "http://localhost:3000", "http://192.168.129.199:3000"],
       methods: ["GET", "POST"],
       credentials: true,
     },

@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 export const controlSchema = new mongoose.Schema(
   {
-    up: { type: String, default: "KeyW" },
-    down: { type: String, default: "KeyS" },
-    left: { type: String, default: "KeyA" },
-    right: { type: String, default: "KeyD" },
-    skill1: { type: String, default: "KeyC" },
-    skill2: { type: String, default: "KeyF" },
-    skill3: { type: String, default: "KeyT" },
+    up: { type: String, default: "w" },
+    down: { type: String, default: "s" },
+    left: { type: String, default: "a" },
+    right: { type: String, default: "d" },
+    skill1: { type: String, default: "c" },
+    skill2: { type: String, default: "f" },
+    skill3: { type: String, default: "t" },
   },
   { _id: false }
 );

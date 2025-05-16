@@ -5,7 +5,7 @@ import { DirectMessage } from "../models/directMessage.model";
 
 let io: Server;
 const activeUsers = new Map<string, string>(); // socket.id -> userId
-const lobbyList = new Set();
+const userRooms = new Map();
 
 export function initSocket(server: HttpServer) {
   if (io) return;
@@ -106,6 +106,7 @@ export function initSocket(server: HttpServer) {
       io.to(socket.id).emit("lobby:success");
 
       socket.join(room);
+      userRooms.set(socket.id, room);
 
       try {
         await axios.put(`http://localhost:999/lobby/${room}`, { addPlayers: [joining] })
@@ -124,7 +125,7 @@ export function initSocket(server: HttpServer) {
         return;
 
       socket.leave(room);
-
+      userRooms.delete(socket.id);
       try {
         await axios.put(`http://localhost:999/lobby/${room}`, { removePlayers: [leaving] })
         io.to(room).emit("lobby:update", {});
@@ -164,9 +165,28 @@ export function initSocket(server: HttpServer) {
       io.to(room).emit("game:finished",{winner: winner});
     })
 
+    socket.on("game:ready", (data)=> {
+      const {room} = data;
+      socket.to(room).emit("game:ready");
+    })
+
     // ==== Disconnect ====
-    socket.on("disconnect", () => {
+    socket.on("disconnect", async() => {
       console.log(`[SOCKET] Disconnected: ${socket.id}`);
+        const leaving = activeUsers.get(socket.id);
+        const room = userRooms.get(socket.id);
+        if(!room) return;
+        userRooms.delete(socket.id)
+        try {
+          console.log("Attempting");
+          const resp = await axios.put(`http://localhost:999/lobby/${room}`, { removePlayers: [leaving] });
+          // console.log(resp);
+          io.to(room).emit("lobby:update", {});
+          console.log("Left");
+        } catch (err) {
+          console.log("Couldn't send to db");
+        }
+      
       activeUsers.delete(socket.id);
     });
   });

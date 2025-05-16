@@ -109,7 +109,7 @@ export function initSocket(server: HttpServer) {
       userRooms.set(socket.id, room);
 
       try {
-        await axios.put(`http://localhost:999/lobby/${room}`, { addPlayers: [joining] })
+        await axios.put(`https://maze-runner-backend-2.onrender.com/lobby/${room}`, { addPlayers: [joining] })
         io.to(room).emit("lobby:update", {});
       } catch (err) {
         console.log("Couldn't send to db");
@@ -127,12 +127,17 @@ export function initSocket(server: HttpServer) {
       socket.leave(room);
       userRooms.delete(socket.id);
       try {
-        await axios.put(`http://localhost:999/lobby/${room}`, { removePlayers: [leaving] })
+        await axios.put(`https://maze-runner-backend-2.onrender.com/lobby/${room}`, { removePlayers: [leaving] })
         io.to(room).emit("lobby:update", {});
       } catch (err) {
         console.log("Couldn't send to db");
       }
     });
+
+    socket.on("lobby:ready", (data)=> {
+      const {room} = data;
+      socket.to(room).emit("lobby:ready");
+    })
 
     socket.on("lobby:start", async (data) => {
       const { room } = data
@@ -141,7 +146,7 @@ export function initSocket(server: HttpServer) {
         return;
 
       try {
-        await axios.put(`http://localhost:999/lobby/${room}`, { status: "in_progress" })
+        await axios.put(`https://maze-runner-backend-2.onrender.com/lobby/${room}`, { status: "in_progress" })
         io.to(room).emit("lobby:start");
       } catch (err) {
         console.log("Couldn't start the game");
@@ -179,7 +184,7 @@ export function initSocket(server: HttpServer) {
         userRooms.delete(socket.id)
         try {
           console.log("Attempting");
-          const resp = await axios.put(`http://localhost:999/lobby/${room}`, { removePlayers: [leaving] });
+          const resp = await axios.put(`https://maze-runner-backend-2.onrender.com/lobby/${room}`, { removePlayers: [leaving] });
           // console.log(resp);
           io.to(room).emit("lobby:update", {});
           console.log("Left");
